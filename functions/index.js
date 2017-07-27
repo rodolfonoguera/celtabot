@@ -22,7 +22,7 @@ const port = process.env.PORT || 3000;
         
         switch(req.body.result.action) {
             case "cantidad":
-                getCampuses();
+                getCampuses(res);
                 //break;
             case actions[1]:
                 console.log("entro en " + actions[1]);
@@ -48,7 +48,7 @@ const port = process.env.PORT || 3000;
 
  });
 
- function getCampuses(){
+ function getCampuses(res){
         console.log("entro en cantidad");
          return res.json({
                     speech: "Bienvenido, de que quieres la pizza? \npeperoni, maiz, napoli.",
