@@ -1,4 +1,7 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+admin.initializeApp(functions.config().firebase);
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -6,16 +9,18 @@ const functions = require('firebase-functions');
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
-'use strict'
+//'use strict'
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const port = process.env.PORT || 3000;
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const app = express();
+//const port = process.env.PORT || 3000;
 //var actions = ['pizzas', 'ordenar'];
+var request = require('request');
+
 
  exports.celtabot = functions.https.onRequest((req, res) => {
-  console.log("Hello from Firebase!");
+  //console.log("Hello from Firebase!");
    if(req.body.result && req.body.result.parameters && req.body.result.contexts){
         
         console.log(req.body.result.contexts[0]);
@@ -23,21 +28,21 @@ const port = process.env.PORT || 3000;
         switch(req.body.result.action) {
             case "cantidad":
                 getCampuses(res);
-                //break;
-            case actions[1]:
-                console.log("entro en " + actions[1]);
+                break;
+            case "campus":
+                console.log("entro en campus");
 
                 var speech = "Has cancelado la orden."
 
-                if((req.body.result.contexts[0].parameters.orderResponse).toLowerCase() == "si")
+               /* if((req.body.result.contexts[0].parameters.orderResponse).toLowerCase() == "si")
                     speech = "Has ordenado " + req.body.result.contexts[0].parameters.quantity + " pizza sabor a " + req.body.result.contexts[0].parameters.pizzaFlavor;
 
                 return res.json({
                     speech: speech,
                     displayText: speech,
                     source: 'test'
-                });
-                //break;
+                });*/
+                break;
             default:
                 console.log("No entro en nada.");
         };
@@ -49,12 +54,23 @@ const port = process.env.PORT || 3000;
  });
 
  function getCampuses(res){
-        console.log("entro en cantidad");
-         return res.json({
+     
+        
+        request('http://46.101.51.72/api/v1/campuses', function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log('body',body) // Show the HTML for the Google homepage.
+            } else {
+                console.warn('error',error);
+            }
+            });
+       /*  return res.json({
                     speech: "Bienvenido, de que quieres la pizza? \npeperoni, maiz, napoli.",
                     displayText: "tenemos pizza de: peperoni, maiz, napoli",
                     source: 'test'
-                });
+                });*/
+
+                // mirar esto
+                //https://nodejs.org/api/http.html#http_http_request_options_callback
  }
 //app.use(bodyParser.urlencoded({extendd: true}))
 //app.use(bodyParser.json())
